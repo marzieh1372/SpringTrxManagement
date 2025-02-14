@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/person")
 public class PersonController {
 
-    private PersonService personService;
+
+    private final PersonService personService;
 
     public PersonController(PersonService personService) {
         this.personService = personService;
@@ -21,8 +22,8 @@ public class PersonController {
     //**************************************************************************************
 
     @PostMapping
-    public ResponseEntity<Person> savePerson(@RequestBody Person person){
-        return new ResponseEntity<Person>(personService.savePerson(person),HttpStatus.CREATED);
+    public ResponseEntity<Person> savePersonAndAccount(@RequestBody PersonDto personDto){
+        return new ResponseEntity<Person>(personService.savePersonAndAccount(personDto),HttpStatus.CREATED);
     }
 
 }
