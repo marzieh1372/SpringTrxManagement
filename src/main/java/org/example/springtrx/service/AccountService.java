@@ -15,10 +15,24 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Account saveAccount(Account account){
+    public Account saveAccountSimple(Account account,boolean hasException){
         Account savedAccount = accountRepository.save(account);
-        throw new RuntimeException("DummyException: this should cause rollback of both inserts!");
-        //return savedAccount;
+        if (hasException) {
+            throw new RuntimeException("DummyException: this should cause rollback of both inserts!");
+        }
+        return savedAccount;
     }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Account saveAccount(Account account,boolean hasException){
+        Account savedAccount = accountRepository.save(account);
+        if (hasException) {
+            throw new RuntimeException("DummyException: this should cause rollback of both inserts!");
+        }
+        return savedAccount;
+    }
+
+
+
+
 }

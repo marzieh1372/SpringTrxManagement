@@ -12,6 +12,7 @@ Interview
 ------------------------
 https://medium.com/m/global-identity-2?redirectUrl=https%3A%2F%2Flevelup.gitconnected.com%2Finterview-9-scenarios-of-spring-transaction-failure-how-many-have-you-encountered-263e5b425ff0
 https://www.javainuse.com/spring/transaction-interview#google_vignette
+https://www.javainuse.com/spring/boot-transaction-propagation
 #################################################
 #################################################
 #################################################

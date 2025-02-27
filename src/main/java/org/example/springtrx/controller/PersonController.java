@@ -2,6 +2,7 @@ package org.example.springtrx.controller;
 
 
 import org.example.springtrx.model.dto.PersonDto;
+import org.example.springtrx.model.entity.Account;
 import org.example.springtrx.model.entity.Person;
 import org.example.springtrx.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,24 @@ public class PersonController {
         this.personService = personService;
     }
 
+
     //**************************************************************************************
 
-    @PostMapping
-    public ResponseEntity<Person> savePersonAndAccount(@RequestBody PersonDto personDto){
-        return new ResponseEntity<Person>(personService.savePersonAndAccount(personDto),HttpStatus.CREATED);
+    @PostMapping("trx-simple/{hasException}")
+    public ResponseEntity<Person> savePersonAndAccountSimple(@RequestBody PersonDto personDto
+            ,@PathVariable("hasException") boolean hasException){
+        return new ResponseEntity<Person>(personService.savePersonAndAccountSimple(personDto,hasException),
+                HttpStatus.CREATED);
     }
+
+    //**************************************************************************************
+
+    @PostMapping("/trx-new/{hasException}")
+    public ResponseEntity<Person> savePersonAndAccountNew(@RequestBody PersonDto personDto
+            ,@PathVariable("hasException") boolean hasException ){
+        return new ResponseEntity<Person>(personService.savePersonAndAccountNew(personDto,hasException),HttpStatus.CREATED);
+    }
+
+
 
 }
