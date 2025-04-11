@@ -23,7 +23,7 @@ public class AccountService {
         return savedAccount;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Account saveAccount(Account account,boolean hasException){
         Account savedAccount = accountRepository.save(account);
         if (hasException) {
@@ -31,8 +31,5 @@ public class AccountService {
         }
         return savedAccount;
     }
-
-
-
 
 }
