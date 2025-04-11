@@ -50,6 +50,7 @@ public class PersonService {
      * @param personDto
      * @return
      */
+    @Transactional
     public Person savePersonAndAccountNew(PersonDto personDto,boolean hasException){
         Person person = new Person();
         person.setName(personDto.getName());
@@ -57,7 +58,7 @@ public class PersonService {
         Person savedPerson = personRepository.save(person);
         //-----------------------------
         Account account = new Account();
-        account.setAccountNumber("852555");
+        account.setAccountNumber(personDto.getAccountNumber());
         Account savedAccount=accountService.saveAccount(account,hasException);
         savedPerson.setAccount(savedAccount);
 
