@@ -7,6 +7,10 @@ https://spring.io/guides/gs/managing-transactions
 General
 ------------------------
 https://www.marcobehler.com/guides/spring-transaction-management-transactional-in-depth
+https://www.sivalabs.in/spring-boot-database-transaction-management-tutorial/
+https://www.marcobehler.com/guides/spring-transaction-management-transactional-in-depth
+https://www.baeldung.com/spring-transactional-propagation-isolation
+
 #################################################
 Interview
 ------------------------

@@ -1,23 +1,34 @@
-Isolation Levels
-READ_UNCOMMITTED
+******************
+*Isolation Levels*
+******************
 
+****************
+READ_UNCOMMITTED
+****************
 Description: This is the lowest isolation level. It allows transactions to read data that has been modified but not yet committed by other transactions. This can lead to dirty reads.
 Example Scenario: An application allows users to view the status of orders. If a user reads an order that another transaction is modifying (but not yet committed), they might see incomplete or inaccurate information.
-READ_COMMITTED
 
+****************
+READ_COMMITTED
+****************
 Description: This isolation level prevents dirty reads. A transaction can only read committed data, but it can still see changes made by other transactions once they are committed.
 Example Scenario: An e-commerce application where users can view product stock levels. Users only see the stock levels that have been committed, avoiding inconsistencies due to ongoing transactions.
-REPEATABLE_READ
 
+****************
+REPEATABLE_READ
+****************
 Description: This level ensures that if a transaction reads a row, it will read the same row’s data if it reads it again within the same transaction, preventing non-repeatable reads. However, it does not prevent phantom reads, where new rows can appear.
 Example Scenario: A bank system ensuring that a user checking their balance multiple times in a transaction always sees the same balance. However, other transactions might add new accounts that could affect queries across the balance check.
-SERIALIZABLE
 
+****************
+SERIALIZABLE
+****************
 Description: This is the highest isolation level. It simulates transactions executing one after the other, preventing dirty reads, non-repeatable reads, and phantom reads. This can drastically reduce concurrency and increase the likelihood of deadlocks.
 Example Scenario: A financial application where consistency is crucial, such as transferring funds between accounts. The system ensures that transactions are fully isolated from each other to maintain data integrity.
 
-
+**********************************
 Choosing the Right Isolation Level
+**********************************
 Choosing the correct isolation level is essential because it directly impacts the balance between data integrity and system performance. For example:
 
 Use READ_UNCOMMITTED in scenarios where performance is more critical than consistency.

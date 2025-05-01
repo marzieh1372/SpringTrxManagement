@@ -1,0 +1,112 @@
+Summary
+REQUIRED: Most common, use when the method should always participate in a transaction.
+REQUIRES_NEW: Use when you need to ensure the method runs independently of a current transaction.
+SUPPORTS: For methods that can run with or without transactions (typically reads).
+NOT_SUPPORTED: For methods that should not have any transaction context at all.
+NEVER: For methods that must not run with a transaction; throw an exception if one exists.
+NESTED: For methods needing to run within a parent transaction, with the ability to roll back independently.
+
+#------------------------------------------------------------------------------------------------------------
+
+1. PROPAGATION_REQUIRED
+
+Description: This is the default propagation level. If a transaction already exists, the method will join that transaction. If not, a new transaction will be created.
+
+Business Example: Imagine an e-commerce application where you place an order and deduct the amount from the user's account balance.
+
+java
+@Service
+public class OrderService {
+
+    @Autowired
+    private AccountService accountService;
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void placeOrder(Order order) {
+        // Deduct balance
+        accountService.deductBalance(order.getUserId(), order.getTotalAmount());
+        // Save order to database
+        // ...
+    }
+}
+2. PROPAGATION_REQUIRES_NEW
+Description: Creates a new transaction. If one already exists, it suspends the current transaction.
+
+Business Example: Logging a critical action, like user activity, should be independent of the main transactional flow. If the main transaction fails, you still want to log the user activity.
+
+java
+@Service
+public class ActivityService {
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void logActivity(UserActivity activity) {
+        // Log activity to a separate table
+        // ...
+    }
+}
+3. PROPAGATION_SUPPORTS
+Description: If a transaction exists, the method will execute within that transaction. If not, it will run non-transactionally.
+
+Business Example: Fetching user preferences where you don't need a transaction if it’s a read operation but will use the existing transaction if it is called during an ongoing transaction.
+
+java
+@Service
+public class UserPreferenceService {
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public UserPreferences getUserPreferences(Long userId) {
+        // Read user preferences from the database
+        // ...
+    }
+}
+4. PROPAGATION_NOT_SUPPORTED
+Description: Executes the method without a transaction. If a transaction exists, it will be suspended.
+
+Business Example: A background job that processes completed orders. You likely don't want this to be part of the transaction that created the order.
+
+java
+@Service
+public class OrderProcessingService {
+
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void processCompletedOrders() {
+        // Process orders without a transaction
+        // ...
+    }
+}
+5. PROPAGATION_NEVER
+Description: Indicates that the method should not run within a transaction. If a transaction exists, an exception will be thrown.
+
+Business Example: A health check that should not be transactional at all, to ensure that it runs outside of any transactional context.
+
+java
+@Service
+public class HealthCheckService {
+
+    @Transactional(propagation = Propagation.NEVER)
+    public void checkHealth() {
+        // Perform health checks
+    }
+}
+
+*******************************************************************************************************************
+///////////////////////
+6. PROPAGATION_NESTED
+///////////////////////
+Description: Similar to REQUIRED, but it creates a nested transaction if a transaction already exists.
+ Rollbacks in nested transactions will not affect the parent transaction.
+
+Business Example: A multi-step process where each step should be rolled back independently,
+but the entire operation should still be part of a larger transaction.
+ For example, processing a payment that involves multiple sub-steps (like sending a confirmation email).
+
+java
+@Service
+public class PaymentService {
+
+    @Transactional(propagation = Propagation.NESTED)
+    public void processPayment(Payment payment) {
+        // Process the payment
+        // If something fails here, just rollback this payment processing, not the entire order
+    }
+}

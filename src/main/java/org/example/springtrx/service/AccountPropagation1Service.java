@@ -7,15 +7,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AccountService {
+public class AccountPropagation1Service {
 
     private final AccountRepository accountRepository;
 
-    public AccountService(AccountRepository accountRepository) {
+    public AccountPropagation1Service(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
-    public Account saveAccountSimple(Account account,boolean hasException){
+
+    public Account saveAccountWithoutTRX(Account account, boolean hasException) {
         Account savedAccount = accountRepository.save(account);
         if (hasException) {
             throw new RuntimeException("DummyException: this should cause rollback of both inserts!");
@@ -24,7 +25,7 @@ public class AccountService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Account saveAccount(Account account,boolean hasException){
+    public Account saveAccountWithRequiredNew(Account account, boolean hasException) {
         Account savedAccount = accountRepository.save(account);
         if (hasException) {
             throw new RuntimeException("DummyException: this should cause rollback of both inserts!");
