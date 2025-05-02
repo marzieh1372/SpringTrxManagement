@@ -3,8 +3,8 @@ package org.example.springtrx.controller;
 
 import org.example.springtrx.model.dto.PersonDto;
 import org.example.springtrx.model.entity.Person;
-import org.example.springtrx.service.PersonPropagation1Service;
-import org.example.springtrx.service.PersonPropagation2Service;
+import org.example.springtrx.service.propgations.PersonPropagation1Service;
+import org.example.springtrx.service.propgations.PersonPropagation2Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

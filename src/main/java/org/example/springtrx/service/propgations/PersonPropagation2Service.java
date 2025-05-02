@@ -1,4 +1,4 @@
-package org.example.springtrx.service;
+package org.example.springtrx.service.propgations;
 
 import org.example.springtrx.model.dto.PersonDto;
 import org.example.springtrx.model.entity.Person;

@@ -18,6 +18,9 @@ https://medium.com/m/global-identity-2?redirectUrl=https%3A%2F%2Flevelup.gitconn
 https://www.javainuse.com/spring/transaction-interview#google_vignette
 https://www.javainuse.com/spring/boot-transaction-propagation
 #################################################
+Isolation
+------------------------
+https://www.linkedin.com/pulse/understanding-transaction-isolation-levels-spring-ionut-gradinaru-vaz1f/
 #################################################
 #################################################
 #################################################

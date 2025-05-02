@@ -5,33 +5,97 @@
 ****************
 READ_UNCOMMITTED
 ****************
-Description: This is the lowest isolation level. It allows transactions to read data that has been modified but not yet committed by other transactions. This can lead to dirty reads.
-Example Scenario: An application allows users to view the status of orders. If a user reads an order that another transaction is modifying (but not yet committed), they might see incomplete or inaccurate information.
+Description: This is the lowest isolation level. It allows transactions to read data that has been modified
+ but not yet committed by other transactions. This can lead to dirty reads.
+Example Scenario: An application allows users to view the status of orders. If a user reads an order that another
+ transaction is modifying (but not yet committed), they might see incomplete or inaccurate information.
 
 ****************
 READ_COMMITTED
 ****************
-Description: This isolation level prevents dirty reads. A transaction can only read committed data, but it can still see changes made by other transactions once they are committed.
-Example Scenario: An e-commerce application where users can view product stock levels. Users only see the stock levels that have been committed, avoiding inconsistencies due to ongoing transactions.
+Description: This isolation level prevents dirty reads. A transaction can only read committed data,
+ but it can still see changes made by other transactions once they are committed.
+Example Scenario: An e-commerce application where users can view product stock levels. Users only see the stock levels
+that have been committed, avoiding inconsistencies due to ongoing transactions.
 
 ****************
 REPEATABLE_READ
 ****************
-Description: This level ensures that if a transaction reads a row, it will read the same row’s data if it reads it again within the same transaction, preventing non-repeatable reads. However, it does not prevent phantom reads, where new rows can appear.
-Example Scenario: A bank system ensuring that a user checking their balance multiple times in a transaction always sees the same balance. However, other transactions might add new accounts that could affect queries across the balance check.
+Description: This level ensures that if a transaction reads a row, it will read the same row’s data
+if it reads it again within the same transaction, preventing non-repeatable reads. However,
+it does not prevent phantom reads, where new rows can appear.
+Example Scenario: A bank system ensuring that a user checking their balance multiple times in
+ a transaction always sees the same balance. However, other transactions might add new accounts that could affect
+  queries across the balance check.
 
 ****************
 SERIALIZABLE
 ****************
-Description: This is the highest isolation level. It simulates transactions executing one after the other, preventing dirty reads, non-repeatable reads, and phantom reads. This can drastically reduce concurrency and increase the likelihood of deadlocks.
-Example Scenario: A financial application where consistency is crucial, such as transferring funds between accounts. The system ensures that transactions are fully isolated from each other to maintain data integrity.
+Description: This is the highest isolation level. It simulates transactions executing one after the other,
+preventing dirty reads, non-repeatable reads, and phantom reads. This can drastically reduce concurrency
+and increase the likelihood of deadlocks.
+Example Scenario: A financial application where consistency is crucial, such as transferring funds between accounts.
+ The system ensures that transactions are fully isolated from each other to maintain data integrity.
 
 **********************************
 Choosing the Right Isolation Level
 **********************************
-Choosing the correct isolation level is essential because it directly impacts the balance between data integrity and system performance. For example:
+Choosing the correct isolation level is essential because it directly impacts the balance between data integrity
+and system performance. For example:
 
 Use READ_UNCOMMITTED in scenarios where performance is more critical than consistency.
 Opt for READ_COMMITTED for most standard applications.
 Utilize REPEATABLE_READ when you need to ensure transaction consistency but can tolerate some concurrency.
 Reserve SERIALIZABLE for critical transactional systems where data integrity is paramount.
+
+
+-------------------------------------------------------------------------------------------------------------
+Scenario :
+
+Dirty reads: A transaction reads uncommitted changes made by another transaction.
+             These changes might later be rolled back, meaning the data read was never officially committed.
+
+             If T1 transaction reads data from table A1 that was written
+             by another concurrent transaction T2.
+             If on the way T2 is rollback, the data obtained by T1 is invalid one.
+             E.g. a=2 is original data. If T1 read a=1 that was written by T2.
+             If T2 rollback then a=1 will be rollback to a=2 in DB. But, now,
+             T1 has a=1 but in DB table it is changed to a=2.
+
+
+Non-repeatable reads: During a transaction, a row's data changes after it has been read and the transaction reads it again,
+                      getting a different value because another transaction modified and committed those changes in between.
+
+
+                      If T1 transaction reads data from table A1. If another concurrent
+                      transaction (T2) update data on table A1. Then the data that
+                      T1 has read is different from table A1. Because T2 has updated
+                      the data on table A1. E.g. if T1 read a=1 and T2 updated a=2. Then a!=b.
+
+
+Phantom reads: Definition: Occurs when a transaction re-executes a query that retrieves a set of rows based on a condition,
+               and new rows (or "phantoms") are added or removed by another transaction after the first read,
+               changing the result set.
+
+               If T1 transaction reads data from table A1 with certain number of rows.
+               If another concurrent transaction (T2) inserts more rows on table A1.
+               The number of rows read by T1 is different from rows on table A1.
+
+
+| Aspect                     | Non-Repeatable Read                                   | Phantom Read                                  |
+|----------------------------|-------------------------------------------------------|-----------------------------------------------|
+| What changes?              | The **same row's data** changes between reads         | The **set of rows** returned changes (rows added/removed) |
+| Caused by                  | Another transaction **modifying existing data**       | Another transaction **adding or deleting rows** |
+| Example                    | Data in a row has been updated by another transaction | New rows matching the query criteria appear/disappear |
+| Usually prevented at       | **Repeatable Read** or higher                         | **Serializable** isolation level or explicitly locking |
+
+
+
+| Aspect                  | **Non-Repeatable Read**                                                | **Dirty Read**
+|------------------------ |------------------------------------------------------------------------|--------------------------------------------------
+| What data?              | Data **changed** after initial read, during same tx                    | Reads **uncommitted** changes made by other tx
+| When does it occur?     | When data read is modified and committed by others after first read    | When a transaction reads uncommitted data
+| Example scenario        | Transaction reads the same row twice, gets different data              | Transaction reads data modified but not committed
+| Can it cause?           | Data **changes** which affect consistency within the same transaction  | **Fake** or invalid data, inconsistent reads
+| Usually prevented at    | **Repeatable read** or higher                                          | **Read committed** or higher
+

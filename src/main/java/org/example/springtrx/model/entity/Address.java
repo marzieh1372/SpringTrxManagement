@@ -5,15 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
+/*@Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor*/
 @Entity
 public class Address {
 
@@ -21,4 +17,29 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String postalCode;
+
+    public Address() {
+    }
+
+    public Address(Integer id, String postalCode) {
+
+        this.id = id;
+        this.postalCode = postalCode;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
 }

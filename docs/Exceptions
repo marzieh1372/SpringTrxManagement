@@ -1,0 +1,41 @@
+***********
+*  Bug1   *
+***********
+When use nested propgation:
+JpaDialect does not support savepoints - check your JPA provider's capabilities
+
+Solution:
+typically appears when you're trying to use nested transactions or savepoints in Spring,
+ but the JPA provider
+(like Hibernate or EclipseLink) doesn't support these features natively.
+
+Why does this happen?
+JPA itself doesn't natively support savepoints or nested transactions.
+Spring's JpaDialect is responsible for translating transaction management into vendor-specific behavior.
+Some providers (like Hibernate) do support savepoints, but not all configurations or versions do,
+or the support depends on the database and the JDBC driver.
+
+
+- Check your database supports savepoints:
+ select VERSION(); MySql5.5 above support savepoint
+ this command -> SHOW TABLE STATUS; ->Ensure that the Engine column for your tables shows InnoDB.
+---------------------------------------------------
+- Check your Hibernate or JPA provider's capabilities:
+ Hibernate supports savepoints if the JDBC driver supports them.
+ Ensure you are using recent versions of Hibernate.
+ ** For Hibernate, support for savepoints has been available in recent versions (since Hibernate 5.0+).
+ If you haven't declared Hibernate explicitly, check the version used in your project
+  (via dependency:tree or runtime as previously explained).
+---------------------------------------------------
+- Configure your transaction manager properly:
+  Use JpaTransactionManager (or DataSourceTransactionManager) that supports savepoints if underlying DB supports it.
+---------------------------------------------------
+- Ensure nested transactions are explicitly supported:
+---------------------------------------------------
+Workaround:
+If savepoints are not supported, avoid NESTED propagation.
+Use REQUIRES_NEW for independent transactions.
+Or, catch exceptions at the service method level to handle partial rollbacks manually.
+
+The Propagation.NESTED option requires that the underlying database supports savepoints. If you're using MySQL, it’s generally recommended to use Propagation.REQUIRES_NEW for nested transactions instead,
+as MySQL does not support true nested transactions in the same way some other databases do.

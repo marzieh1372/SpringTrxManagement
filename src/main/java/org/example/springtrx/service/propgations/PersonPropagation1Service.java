@@ -1,4 +1,4 @@
-package org.example.springtrx.service;
+package org.example.springtrx.service.propgations;
 
 import org.example.springtrx.model.dto.PersonDto;
 import org.example.springtrx.model.entity.Account;
@@ -20,7 +20,8 @@ public class PersonPropagation1Service {
     //************************************************************
 
     /**
-     * In this example when the saving account method return an exception, person don't have been saved because
+     * In this example when the saving account method return an exception,
+     * person don't have been saved because
      * account and person saved in one account
      * @param personDto
      * @param hasException
